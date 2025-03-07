@@ -3,7 +3,9 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
+
+console.log("Stripe loaded:", stripePromise);
 
 export default function CheckoutPage() {
   return (
