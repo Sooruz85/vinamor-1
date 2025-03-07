@@ -9,7 +9,7 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState("client"); // Valeur par défaut
+  const [role, setRole] = useState("client");
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -20,10 +20,11 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
 
     try {
       if (isLogin) {
+        // Connexion utilisateur
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Récupérer le rôle depuis Firestore
+        // Récupérer le rôle de l'utilisateur depuis Firestore
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -55,16 +56,19 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <button onClick={onClose} className="float-right text-gray-500">✖</button>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+        {/* Bouton pour fermer la modal */}
+        <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 text-lg">✖</button>
+
         <h2 className="text-xl font-semibold mb-4">{isLogin ? "Connexion" : "Inscription"}</h2>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mb-2">{error}</p>}
+
         <form onSubmit={handleAuth} className="space-y-4">
-          {/* Email (Visible) */}
+          {/* Champ Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -73,8 +77,7 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
             />
           </div>
 
-
-          {/* Mot de passe (Masqué par défaut) */}
+          {/* Champ Mot de passe */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Mot de passe</label>
             <div className="relative">
@@ -83,10 +86,10 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
                 placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border p-2 rounded pr-10"
+                className="w-full border p-2 rounded pr-10 bg-white text-black"
                 required
               />
-              {/* Bouton pour afficher/masquer le mot de passe */}
+              {/* Icône pour afficher / masquer le mot de passe */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -97,9 +100,9 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Sélection du rôle */}
+          {/* Sélecteur de rôle (affiché uniquement en mode inscription) */}
           {!isLogin && (
-            <div className="space-y-2">
+            <div>
               <label className="block text-sm font-medium text-gray-700">Sélectionnez votre rôle :</label>
               <select
                 value={role}
@@ -114,11 +117,14 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
             </div>
           )}
 
+          {/* Bouton de soumission */}
           <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
             {isLogin ? "Se connecter" : "S'inscrire"}
           </button>
         </form>
-        <button onClick={() => setIsLogin(!isLogin)} className="text-blue-500 mt-2">
+
+        {/* Lien pour basculer entre connexion et inscription */}
+        <button onClick={() => setIsLogin(!isLogin)} className="text-blue-500 mt-2 w-full text-center">
           {isLogin ? "Créer un compte" : "J'ai déjà un compte"}
         </button>
       </div>
