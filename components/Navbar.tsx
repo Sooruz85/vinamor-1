@@ -52,9 +52,8 @@ export default function Navbar() {
         <Link href="/reservations" className="hover:text-[#C0002D] transition duration-300">Réservations</Link>
         <Link href="/providers" className="hover:text-[#C0002D] transition duration-300">Prestataires</Link>
         <Link href="/commissions" className="hover:text-[#C0002D] transition duration-300">Commissions</Link>
-        <Link href="/payments" className="hover:text-[#C0002D] transition duration-300">Paiements</Link>
         <Link href="/support" className="hover:text-[#C0002D] transition duration-300">Support</Link>
-        <Link href="/payments/checkout" className="hover:text-[#C0002D] transition duration-300">Payer</Link>
+        <Link href="/payments/checkout" className="hover:text-[#C0002D] transition duration-300">Panier</Link>
 
 
 
